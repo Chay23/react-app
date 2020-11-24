@@ -2,24 +2,20 @@ import React, { Component } from 'react';
 
 class Login extends Component{
     
-    //state
-
-    // mode: 'cors', credentials: 'same-origin',
-    // fetch("http://localhost:8000/api/v1/auth/token/login/", {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //         },
-    //     body: JSON.stringify({
-    //         password: "nazi123456",
-    //         email: "m@mail.com"
-    //       })})
-    //     .then(res => res.json())
-    //     .then(result => (console.log(result)))
+    state = {
+        password: "",
+        email: ""
+    }
 
     render(){
-        return ("");
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit}></form>
+                Login <input type="text" name="email" value={this.props.login} onChange={this.props.handleLogin} /><br/>
+                Password <input type="password" name="password" value={this.props.password} onChange={this.props.handleLogin} />
+                <input type="submit" value="Sign in" onClick={this.props.handleToken}/>
+            </div>
+        );
     }
 
 }
