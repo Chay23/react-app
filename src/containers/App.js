@@ -21,6 +21,20 @@ class App extends Component {
 
   };
 
+   requireAuth = (nextState, replace, next) =>{
+    let authenticated = false;
+     if (localStorage.getItem('token')){
+       authenticated = true
+     }
+    if (!authenticated) {
+      replace({
+        pathname: "/login",
+        state: {nextPathname: nextState.location.pathname}
+      });
+    }
+    next();
+  }
+
   handleLogin = (e) => {
     this.setState((prevState, props) => {
       return {[e.target.name]: e.target.value};
@@ -44,7 +58,7 @@ class App extends Component {
             return {token: result.auth_token};
           }); 
         })
-
+    localStorage.setItem('token',this.state.token);
   }
 
   render(){
@@ -60,6 +74,7 @@ class App extends Component {
         path='/registration'
         component={Registration}
         />
+        {localStorage.getItem('token')}
       </Layout>
     </Router>
   );
