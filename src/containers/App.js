@@ -74,7 +74,10 @@ class App extends Component {
         path='/registration'
         component={Registration}
         />
-        {localStorage.getItem('token')}
+        <Route 
+        path='/users'
+        render={props => <Users {...props} token={this.state.token} />}
+        />
       </Layout>
     </Router>
   );
