@@ -21,6 +21,20 @@ class App extends Component {
 
   };
 
+  getCookie = (name) =>{
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
+  componentDidMount(){
+    console.log("<App> componentDidMount "+this.getCookie('token'))
+    if(this.getCookie('token')){
+      this.setState({token:this.getCookie('token')});
+    }
+  }
+
    requireAuth = (nextState, replace, next) =>{
     let authenticated = false;
      if (localStorage.getItem('token')){
@@ -36,6 +50,7 @@ class App extends Component {
   }
 
   handleLogin = (e) => {
+    console.log('Current target '+e.currentTarger);
     this.setState((prevState, props) => {
       return {[e.target.name]: e.target.value};
     });
@@ -58,7 +73,7 @@ class App extends Component {
             return {token: result.auth_token};
           }); 
         })
-    localStorage.setItem('token',this.state.token);
+    document.cookie = `token=${this.state.token}`;
   }
 
   render(){
@@ -68,7 +83,7 @@ class App extends Component {
         <Nav/>
         <Route
         path='/login'
-        render={(props) => (<Login {...props} login={this.state.login} password={this.state.password} handleLogin={this.handleLogin} handleToken={this.handleToken}/>)}
+        render={(props) => (<Login {...props} email={this.state.email} password={this.state.password} handleLogin={this.handleLogin} handleToken={this.handleToken}/>)}
         />
         <Route
         path='/registration'
@@ -76,7 +91,7 @@ class App extends Component {
         />
         <Route 
         path='/users'
-        render={props => <Users {...props} token={this.state.token} />}
+        render={props => <Users {...props} token={this.state.token}/>}
         />
       </Layout>
     </Router>

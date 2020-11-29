@@ -10,10 +10,11 @@ class Login extends Component{
     render(){
         return (
             <div className="container form-group text-center">
-                <form onSubmit={this.handleSubmit}  ></form>
-                Login <input  className="form-control" type="text" name="email" value={this.props.login} onChange={this.props.handleLogin } /><br/>
+                <form name="login-form" onSubmit={this.props.handleToken}>
+                Login <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleLogin } /><br/>
                 Password < input className="form-control"  type="password" name="password" value={this.props.password} onChange={this.props.handleLogin} />
-                <input className={style.button} type="submit" value="Sign in" onClick={this.props.handleToken}/>
+                <input className={style.button} type="submit" value="Sign in"/>
+                </form>
             </div>
         );
     }

@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 const  Users = (props) => {  
 
     useEffect(() => {
-        console.log(props.token);
         fetch("http://localhost:8000/api/v1/auth/users/", {
         method: 'GET',
         headers: {
@@ -12,11 +11,11 @@ const  Users = (props) => {
         .then(res => res.json())
         .then(result => (console.log(result)));
     });
-        return(
-            <div>
-            
-            </div>
-        )
+    return(
+        <div>
+
+        </div>
+    );
     
 }
 
