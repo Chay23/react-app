@@ -6,6 +6,9 @@ function Nav(){
     return(
         <nav>
             <ul>
+                <Link to="/">
+                    <li>Main</li>
+                </Link>
                 <Link to="/login">
                     <li>Sing In</li>
                 </Link>

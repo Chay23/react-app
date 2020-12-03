@@ -8,9 +8,8 @@ import Nav from '../components/Nav/Nav';
 import Login from './Login/Login';
 import Registration from './Registration/Registration';
 import Users from '../components/Users/Users';
+import Main from '../components/Main/Main';
 
-
-const API_URL = 'http://localhost:8000';
 
 class App extends Component {
   state = {
@@ -29,7 +28,6 @@ class App extends Component {
   }
 
   componentDidMount(){
-    console.log("Token "+this.getCookie('token'))
     if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
     }
@@ -79,6 +77,10 @@ class App extends Component {
     <Router>
       <Layout>
         <Nav/>
+        <Route 
+        path='/' exact
+        component={Main}
+        />
         <Route
         path='/login'
         render={(props) => (<Login {...props} email={this.state.email} password={this.state.password} handleState={this.handleState} handleToken={this.handleToken}/>)}
