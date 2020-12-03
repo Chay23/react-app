@@ -12,3 +12,6 @@
     padding-bottom: 8px;
     margin-bottom: 40px;
 }
+.bg-dark {
+    background-color: black!important;
+}
