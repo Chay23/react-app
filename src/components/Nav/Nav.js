@@ -1,22 +1,22 @@
 import React from 'react';
-import './Nav.module.css';
+import style from './Nav.css';
 import {Link} from 'react-router-dom'
 
 function Nav(){
     return(
-        <nav>
+        <nav className="navbar navbar-dark bg-dark">
             <ul>
                 <Link to="/">
-                    <li>Main</li>
+                    <li class="navbar-brand">Main</li>
                 </Link>
                 <Link to="/login">
-                    <li>Sing In</li>
+                    <li class="navbar-brand">Sing In</li>
                 </Link>
                 <Link to="/registration">
-                    <li>Sing Up</li>
+                    <li class="navbar-brand">Sing Up</li>
                 </Link>
                 <Link to="/users">
-                    <li>Users</li>
+                    <li class="navbar-brand">Users</li>
                 </Link>
             </ul>
         </nav>
