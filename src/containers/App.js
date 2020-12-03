@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    console.log("<App> componentDidMount "+this.getCookie('token'))
+    console.log("Token "+this.getCookie('token'))
     if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
     }
@@ -49,14 +49,14 @@ class App extends Component {
     next();
   }
 
-  handleLogin = (e) => {
-    console.log('Current target '+e.currentTarger);
+  handleState = (e) => {
     this.setState((prevState, props) => {
       return {[e.target.name]: e.target.value};
     });
   }
 
-  handleToken = () => {
+  handleToken = (e) => {
+    e.preventDefault();
     fetch("http://localhost:8000/api/v1/auth/token/login/", {
         method: 'POST',
         headers: {
@@ -69,11 +69,9 @@ class App extends Component {
           })})
         .then(res => res.json())
         .then(result => {
-          this.setState((prevState, props) => {
-            return {token: result.auth_token};
-          }); 
-        })
-    document.cookie = `token=${this.state.token}`;
+          this.setState({token: result.auth_token});
+          document.cookie = `token=${this.state.token}`;
+          });
   }
 
   render(){
@@ -83,11 +81,11 @@ class App extends Component {
         <Nav/>
         <Route
         path='/login'
-        render={(props) => (<Login {...props} email={this.state.email} password={this.state.password} handleLogin={this.handleLogin} handleToken={this.handleToken}/>)}
+        render={(props) => (<Login {...props} email={this.state.email} password={this.state.password} handleState={this.handleState} handleToken={this.handleToken}/>)}
         />
         <Route
         path='/registration'
-        component={Registration}
+        render={ (props) => (<Registration {...props} handleState={this.handleState} handleToken={this.handleToken} getCookie={this.getCookie}/>)}
         />
         <Route 
         path='/users'
