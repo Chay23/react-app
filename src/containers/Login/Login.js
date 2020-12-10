@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import style from './Login.module.css';
+import './Login.css';
 class Login extends Component{
     
     state = {
@@ -11,9 +11,9 @@ class Login extends Component{
         return (
             <div className="container form-group text-center">
                 <form onSubmit={this.props.handleToken}>
-                Login <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleLogin } /><br/>
-                Password < input className="form-control"  type="password" name="password" value={this.props.password} onChange={this.props.handleLogin} />
-                <input className={style.button} type="submit" value="Sign in"/>
+                Login <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleState } /><br/>
+                Password < input className="form-control"  type="password" name="password" value={this.props.password} onChange={this.props.handleState} />
+                <input className="button" type="submit" value="Sign in"/>
                 </form>
             </div>
         );
