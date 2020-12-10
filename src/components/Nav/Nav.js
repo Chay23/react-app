@@ -18,6 +18,9 @@ function Nav(){
                 <Link to="/users">
                     <li class="navbar-brand">Users</li>
                 </Link>
+                <Link to="/assignments">
+                    <li class="navbar-brand">Assignments</li>
+                </Link>
             </ul>
         </nav>
     );

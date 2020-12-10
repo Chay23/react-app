@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import style from './Registration.module.css';
+import './Registration.css';
 
 class Registration extends Component{
     
@@ -63,18 +63,12 @@ class Registration extends Component{
         
         this.setState({password:'',re_password:''});
         
-        setTimeout(() => this.props.handleToken(e), 2000);
-        let token = this.props.getCookie('token')
+        setTimeout(() => this.props.handleToken(e), 1000);
+        setTimeout(() => {this.setState({token: this.props.getCookie('token')})},1500);
         
-        setTimeout(() => this.createProfile(token), 3000);
+        setTimeout(() => this.createProfile(this.state.token), 2000);
     }
     
-    // {
-        // "first_name":"Bob",
-        // "last_name":"Zamora",
-        // "group":"IPZ-31"
-    // }
-
 
     render(){
         return (
@@ -86,7 +80,7 @@ class Registration extends Component{
                     Email <input className="form-control"  type="text" name="email" value={this.state.email} onChange={e => {this.updateState(e); this.props.handleState(e)}}/><br/>
                     Password <input className="form-control"  type="password" name="password" value={this.state.password} onChange={e => {this.updateState(e); this.props.handleState(e)}}/><br/>
                     Confirm password <input className="form-control"  type="password" name="re_password" value={this.state.re_password} onChange={this.updateState} /><br/>
-                    <input  className={style.button} type="submit" value="Sign up"/>
+                    <input  className="button" type="submit" value="Sign up"/>
                 </form>
             </div>
         );

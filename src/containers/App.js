@@ -1,4 +1,3 @@
-import classes from'./App.module.css';
 
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
@@ -9,6 +8,8 @@ import Login from './Login/Login';
 import Registration from './Registration/Registration';
 import Users from '../components/Users/Users';
 import Main from '../components/Main/Main';
+import Assingments from './Assignments/Assignments';
+import Assingment from './Assignments/Assignment/Assignment';
 
 
 class App extends Component {
@@ -28,14 +29,16 @@ class App extends Component {
   }
 
   componentDidMount(){
-    if(this.getCookie('token')){
+    if(this.getCookie('token') !== undefined){
       this.setState({token:this.getCookie('token')});
     }
+    document.cookie = `token=${undefined}`;
+
   }
 
-   requireAuth = (nextState, replace, next) =>{
+   requireAuth = (nextState, replace, next) => {
     let authenticated = false;
-     if (localStorage.getItem('token')){
+     if (this.getCookie('token')){
        authenticated = true
      }
     if (!authenticated) {
@@ -92,6 +95,15 @@ class App extends Component {
         <Route 
         path='/users'
         render={props => <Users {...props} token={this.state.token}/>}
+        onEnter={this.requireAuth}
+        />
+        <Route 
+        path='/assignments' exact
+        render={props => <Assingments {...props} getToken={() =>this.getCookie('token')}/>}
+        />
+        <Route 
+        path='/assignments/:id'
+        render={props => <Assingment {...props} getToken={() =>this.getCookie('token')}/>}
         />
       </Layout>
     </Router>

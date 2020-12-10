@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 const  Users = (props) => {  
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/v1/auth/users/", {
+        fetch("http://localhost:8000/api/v1/users/", {
         method: 'GET',
         headers: {
             'Authorization': `Token ${props.token}`
