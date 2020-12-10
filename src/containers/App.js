@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Layout from '../components/Layout/Layout';
 import Nav from '../components/Nav/Nav';
@@ -29,15 +29,16 @@ class App extends Component {
   }
 
   componentDidMount(){
-    if(this.getCookie('token') !== undefined){
+    if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
     }
+    // document.cookie = `token=${undefined}`;
 
   }
 
    requireAuth = (nextState, replace, next) => {
     let authenticated = false;
-     if (this.getCookie('token')){
+     if (this.getCookie('token') !== undefined){
        authenticated = true
      }
     if (!authenticated) {
@@ -72,6 +73,7 @@ class App extends Component {
           this.setState({token: result.auth_token});
           document.cookie = `token=${this.state.token}`;
           });
+    this.setState({password:""})
   }
 
   render(){
@@ -102,7 +104,7 @@ class App extends Component {
         />
         <Route 
         path='/assignments/:id'
-        render={props => <Assingment {...props} getToken={() =>this.getCookie('token')}/>}
+        render={props => <Assingment {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>}
         />
       </Layout>
     </Router>
