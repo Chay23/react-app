@@ -32,7 +32,6 @@ class App extends Component {
     if(this.getCookie('token') !== undefined){
       this.setState({token:this.getCookie('token')});
     }
-    document.cookie = `token=${undefined}`;
 
   }
 
