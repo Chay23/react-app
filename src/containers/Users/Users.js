@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-
+import './Users.css'
 
 class  Users extends Component {
     state = {
@@ -34,15 +33,18 @@ class  Users extends Component {
     };
     render(){
         let usersList = this.state.users.length !== 0 ? this.state.users.map((user, index) => (
-            <div key={user.user.id}>
+            <div key={user.user.id} className='user-item'>
                 <h4>{user.first_name} {user.last_name}</h4>
-                <h4>{user.user.email}</h4>
+                <p>{user.user.email}</p>
             </div>
         )) :<h3>No users ops</h3> 
         return(
-            <div>
-               <h2>{this.state.group}</h2>
+            <div className='container center'>
+               <h2>Group name: {this.state.group}</h2>
+               <hr/>
+               <div className='users-list'>
               {usersList}
+              </div>
             </div>
         );
     }
