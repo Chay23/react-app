@@ -6,7 +6,7 @@ import Layout from '../components/Layout/Layout';
 import Nav from '../components/Nav/Nav';
 import Login from './Login/Login';
 import Registration from './Registration/Registration';
-import Users from '../components/Users/Users';
+import Users from './Users/Users';
 import Main from '../components/Main/Main';
 import Assingments from './Assignments/Assignments';
 import Assingment from './Assignments/Assignment/Assignment';
@@ -32,6 +32,7 @@ class App extends Component {
     if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
     }
+    this.getCurrentUserId()
     // document.cookie = `token=${undefined}`;
 
   }
@@ -74,6 +75,19 @@ class App extends Component {
           document.cookie = `token=${this.state.token}`;
           });
     this.setState({password:""})
+    setTimeout(() => {this.getCurrentUserId()} ,1000);
+  }
+
+  getCurrentUserId = () => {
+    fetch(`http://localhost:8000/api/v1/auth/users/me/`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Token ${this.getCookie('token')}`
+            }})
+        .then(res => res.json())
+        .then(user => {
+            document.cookie = `id=${user.id}`;
+        });
   }
 
   render(){
@@ -95,7 +109,7 @@ class App extends Component {
         />
         <Route 
         path='/users'
-        render={props => <Users {...props} token={this.state.token}/>}
+        render={props => <Users {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>}
         onEnter={this.requireAuth}
         />
         <Route 
