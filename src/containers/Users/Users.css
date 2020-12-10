@@ -1,0 +1,15 @@
+.users-list{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+}
+.user-item{
+    border: 3px black solid;
+    border-radius: 5px;
+    padding: 8px;
+    font-weight: bolder;
+    font-style: unset;
+    box-shadow: 5px 2px 5px black;
+    padding-left: 20px;
+
+}
