@@ -7,19 +7,22 @@ function Nav(){
         <nav className="navbar navbar-dark bg-dark">
             <ul>
                 <Link to="/">
-                    <li class="navbar-brand">Main</li>
+                    <li className="navbar-brand">Main</li>
                 </Link>
                 <Link to="/login">
-                    <li class="navbar-brand">Sing In</li>
+                    <li className="navbar-brand">Sing In</li>
                 </Link>
                 <Link to="/registration">
-                    <li class="navbar-brand">Sing Up</li>
+                    <li className="navbar-brand">Sing Up</li>
                 </Link>
                 <Link to="/users">
-                    <li class="navbar-brand">Users</li>
+                    <li className="navbar-brand">Users</li>
                 </Link>
                 <Link to="/assignments">
-                    <li class="navbar-brand">Assignments</li>
+                    <li className="navbar-brand">Assignments</li>
+                </Link>
+                <Link to="/subjects">
+                    <li className="navbar-brand">Subjects</li>
                 </Link>
             </ul>
         </nav>

@@ -10,7 +10,7 @@ import Users from './Users/Users';
 import Main from '../components/Main/Main';
 import Assingments from './Assignments/Assignments';
 import Assingment from './Assignments/Assignment/Assignment';
-
+import Subjects from './Subjects/Subjects';
 
 class App extends Component {
   state = {
@@ -119,6 +119,10 @@ class App extends Component {
         <Route 
         path='/assignments/:id'
         render={props => <Assingment {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>}
+        />
+        <Route 
+        exact path='/subjects' 
+        render={props => <Subjects {...props} getToken={() =>this.getCookie('token')} />}
         />
       </Layout>
     </Router>
