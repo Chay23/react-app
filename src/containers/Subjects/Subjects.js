@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import "./Subjects.css"
 
 class Subjects extends Component {
     state = {
@@ -19,14 +20,18 @@ class Subjects extends Component {
 
     render(){
         let subjectList = this.state.subjects.length !== 0 ? this.state.subjects.map((subject, index) => (
-            <h3 key={subject.id}>
+            <div key={subject.id} className='subject-item'>
+            <h3>
                 <Link to={`/subjects/${subject.id}`}>{subject.title}</Link>
             </h3>
+            </div>
         )) : <h3>No subjects yet</h3>
         return(
-            <div>
+            <div className="container center">
                 <h4>Available courses</h4>
+                <div className="subjects-list">
                 {subjectList}
+                </div>
             </div>
         );
     }
