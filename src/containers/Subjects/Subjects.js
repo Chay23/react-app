@@ -23,10 +23,9 @@ class Subjects extends Component {
                 <Link to={`/subjects/${subject.id}`}>{subject.title}</Link>
             </h3>
         )) : <h3>No subjects yet</h3>
-        console.log(subjectList);
         return(
             <div>
-                <h4>Showing all subjects</h4>
+                <h4>Available courses</h4>
                 {subjectList}
             </div>
         );
