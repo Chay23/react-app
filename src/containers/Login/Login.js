@@ -11,7 +11,7 @@ class Login extends Component{
         return (
             <div className="container form-group text-center">
                 <form onSubmit={this.props.handleToken}>
-                Login <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleState } /><br/>
+                Email <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleState } /><br/>
                 Password < input className="form-control"  type="password" name="password" value={this.props.password} onChange={this.props.handleState} />
                 <input className="button" type="submit" value="Sign in"/>
                 </form>

@@ -29,13 +29,11 @@ class App extends Component {
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
-  componentDidMount(){
+  componentDidMount = async () => {
     if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
     }
     this.getCurrentUserId()
-    // document.cookie = `token=${undefined}`;
-
   }
 
    requireAuth = (nextState, replace, next) => {
@@ -58,9 +56,9 @@ class App extends Component {
     });
   }
 
-  handleToken = (e) => {
+  handleToken = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:8000/api/v1/auth/token/login/", {
+    const req = await fetch("http://localhost:8000/api/v1/auth/token/login/", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -70,25 +68,22 @@ class App extends Component {
             password: this.state.password,
             email: this.state.email
           })})
-        .then(res => res.json())
-        .then(result => {
-          this.setState({token: result.auth_token});
-          document.cookie = `token=${this.state.token}`;
-          });
-    this.setState({password:""})
-    setTimeout(() => {this.getCurrentUserId()} ,1000);
+    const result = await req.json()
+    this.setState({token: result.auth_token});
+    document.cookie = `token=${this.state.token}`;
+
+    this.setState({password: ""})
+    this.getCurrentUserId();
   }
 
-  getCurrentUserId = () => {
-    fetch(`http://localhost:8000/api/v1/auth/users/me/`, {
+  getCurrentUserId = async () => {
+    const req = await fetch(`http://localhost:8000/api/v1/auth/users/me/`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.getCookie('token')}`
             }})
-        .then(res => res.json())
-        .then(user => {
-            document.cookie = `id=${user.id}`;
-        });
+    const cur_user = await req.json();
+    document.cookie = `id=${cur_user.id}`;
   }
 
   render(){

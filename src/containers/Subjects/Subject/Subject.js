@@ -20,7 +20,7 @@ class Subject extends Component{
     render(){
         const status = this.state.status;
         const elements = [];
-        if (status != 404){
+        if (status !== 404){
             elements.push(<h1>{this.state.subject.title}</h1>)
             elements.push(<h5>{this.state.subject.description}</h5>)
             elements.push(<p>Instructor: <Link>{this.state.subject.user}</Link></p>)
