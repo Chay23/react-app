@@ -33,7 +33,7 @@ class Registration extends Component{
                     group: this.state.group
             }
             )});
-            const res = await req.json()
+            // const res = await req.json()
     }
 
     handleRegistration = async (e) => {
