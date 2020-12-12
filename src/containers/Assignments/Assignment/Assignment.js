@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import {baseUrl} from "../../../config";
 
 class Assignment extends Component{
     state = {
@@ -9,7 +10,7 @@ class Assignment extends Component{
     }
 
     componentDidMount = async () =>{
-        const req = await fetch(`http://localhost:8000/api/v1/assignments/${this.props.match.params.id}`, {
+        const req = await fetch(baseUrl + `/assignments/${this.props.match.params.id}`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
@@ -39,7 +40,7 @@ class Assignment extends Component{
         formData.append('assignment',this.props.match.params.id)
         formData.append('created_by',"1")
         
-        const req = await fetch("http://localhost:8000/api/v1/submissions/", {
+        const req = await fetch(baseUrl + "/submissions/", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

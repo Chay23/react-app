@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
+import {baseUrl} from "../../config";
+
 class Assignments extends Component{
     state = {
         assignments: []
     }
     componentDidMount = async () => {
-        const req = await fetch("http://localhost:8000/api/v1/assignments/", {
+        const req = await fetch(baseUrl + "/assignments/", {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`

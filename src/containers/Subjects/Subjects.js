@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import "./Subjects.css"
+import {baseUrl} from "../../config";
 
 class Subjects extends Component {
     state = {
@@ -8,7 +9,7 @@ class Subjects extends Component {
     }
     componentDidMount = async () => {
         const token = await this.props.getToken();
-        const res = await fetch("http://localhost:8000/api/v1/subjects/", {
+        const res = await fetch(baseUrl + "/subjects/", {
         method: 'GET',
         headers: {
             'Authorization': `Token ${token}`

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Users.css'
+import {baseUrl} from "../../config";
 
 class  Users extends Component {
     state = {
@@ -8,7 +9,7 @@ class  Users extends Component {
     }
     
     getCurrentUserGroup = async () => {
-        const req = await fetch(`http://localhost:8000/api/v1/users/${this.props.getUserId()}/profile`, {
+        const req = await fetch(baseUrl + `/users/${this.props.getUserId()}/profile`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
@@ -21,7 +22,7 @@ class  Users extends Component {
     };
 
     getUsersInGroup = async() => {
-        const req = await fetch(`http://localhost:8000/api/v1/users/group/${this.state.group}`, {
+        const req = await fetch(baseUrl + `/users/group/${this.state.group}`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
