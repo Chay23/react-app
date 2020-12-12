@@ -8,16 +8,14 @@ class Assignment extends Component{
         code: '# type your code...',
     }
 
-    componentDidMount = () =>{
-        fetch(`http://localhost:8000/api/v1/assignments/${this.props.match.params.id}`, {
+    componentDidMount = async () =>{
+        const req = await fetch(`http://localhost:8000/api/v1/assignments/${this.props.match.params.id}`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
             }})
-        .then(res => res.json())
-        .then(result => {
-            this.setState({assignment:result})
-        });
+        const assignment = req.json()
+        this.setState({assignment:assignment})
 
     }
 
@@ -28,11 +26,11 @@ class Assignment extends Component{
     onChange = (newValue, e) =>{
     }
 
-    handleChange = (e) =>{
+    handleChangeFile = (e) =>{
         this.setState({attachedFile: e.target.files[0]});
       }
     
-    handleSumbit = (e) =>{
+    handleSumbit = async (e) =>{
         e.preventDefault();
         let formData = new FormData();
         
@@ -41,7 +39,7 @@ class Assignment extends Component{
         formData.append('assignment',this.props.match.params.id)
         formData.append('created_by',"1")
         
-        fetch("http://localhost:8000/api/v1/submissions/", {
+        const req = await fetch("http://localhost:8000/api/v1/submissions/", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -49,11 +47,8 @@ class Assignment extends Component{
             },
             body: formData
             })
-            .then(res => (res.json()))
-            .then(result => {this.setState({
-                    id: result.id
-                });
-            });
+        const result = await req.json()
+        this.setState({id: result.id});
       }
 
     render(){
@@ -68,7 +63,7 @@ class Assignment extends Component{
                 <p>{this.state.assignment.description}</p>
                 <form onSubmit={this.handleSumbit}>
                     <input type="file" 
-                        onChange={this.handleChange}>
+                        onChange={this.handleChangeFile}>
                     </input>
                 
                     <MonacoEditor

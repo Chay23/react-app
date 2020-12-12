@@ -4,22 +4,19 @@ class Assignments extends Component{
     state = {
         assignments: []
     }
-    componentDidMount = () => {
-        fetch("http://localhost:8000/api/v1/assignments/", {
+    componentDidMount = async () => {
+        const req = await fetch("http://localhost:8000/api/v1/assignments/", {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
-            }})
-        .then(res => res.json())
-        .then(result => {
-            this.setState({assignments:result})
-        });
+        }});
+        const assignments = await req.json();
+        this.setState({assignments:assignments});
 
     }
 
 
     render(){
-        console.log(this.state.assignments.length);
         let assignmentList = this.state.assignments.length !== 0 ? this.state.assignments.map((assignment, index) => (
             <h3 key={assignment.id}>
                 <Link to={`/assignments/${assignment.id}`}>{assignment.title}</Link></h3>

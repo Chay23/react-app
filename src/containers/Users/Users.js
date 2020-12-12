@@ -7,29 +7,32 @@ class  Users extends Component {
         group: ""
     }
     
-    getCurrentUserGroup = () => {
-        fetch(`http://localhost:8000/api/v1/users/${this.props.getUserId()}/profile`, {
+    getCurrentUserGroup = async () => {
+        const req = await fetch(`http://localhost:8000/api/v1/users/${this.props.getUserId()}/profile`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
-            }})
-        .then(res => res.json())
-        .then(result => (this.setState({group:result.group})));
+        }})
+        const result = await req.json();
+        this.setState({
+            group:result.group}, 
+            () => {this.getUsersInGroup()}
+        );
     };
 
-    getUserInGroup = () => {
-        fetch(`http://localhost:8000/api/v1/users/group/${this.state.group}`, {
+    getUsersInGroup = async() => {
+        const req = await fetch(`http://localhost:8000/api/v1/users/group/${this.state.group}`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
-            }})
-        .then(res => res.json())
-        .then(result => {this.setState({users:result})});
+        }})
+        const users = await req.json()
+        this.setState({users:users});
+
     };
 
     componentDidMount = () => {
-        this.getCurrentUserGroup()
-        setTimeout(() => {this.getUserInGroup()}, 1000)
+        this.getCurrentUserGroup();
     };
     render(){
         let usersList = this.state.users.length !== 0 ? this.state.users.map((user, index) => (

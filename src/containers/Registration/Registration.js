@@ -4,14 +4,12 @@ import './Registration.css';
 class Registration extends Component{
     
     state = {
-        id: "",
         email: "",
         password: "",
         re_password: "",
         first_name: "",
         last_name: "",
-        group: "",
-        token: ""
+        group: ""
     }
 
     updateState = (e) => {
@@ -20,8 +18,8 @@ class Registration extends Component{
           });
     }
 
-    createProfile = (token) =>{
-        fetch(`http://localhost:8000/api/v1/users/${this.state.id}/profile/`, {
+    createProfile = async (token, id) =>{
+        const req = await fetch(`http://localhost:8000/api/v1/users/${id}/profile/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -34,14 +32,13 @@ class Registration extends Component{
                     last_name: this.state.last_name,
                     group: this.state.group
             }
-            )})
-            .then(res => (res.json()))
-            .then(result => {console.log(result)})
+            )});
+            // const res = await req.json()
     }
 
-    handleRegistration = (e) => {
+    handleRegistration = async (e) => {
         e.preventDefault();
-        fetch("http://localhost:8000/api/v1/auth/users/", {
+        const req = await fetch("http://localhost:8000/api/v1/auth/users/", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -54,19 +51,13 @@ class Registration extends Component{
                 re_password: this.state.re_password
                 }
             )})
-            .then(res => (res.json()))
-            .then(result => {this.setState({
-                    id: result.id
-                });
-                document.cookie = `id=${result.id}`;
-            })
-        
+        const user = await req.json()
+        this.setState({id: user.id});
+        document.cookie = `id=${user.id}`;
+    
         this.setState({password:'',re_password:''});
-        
-        setTimeout(() => this.props.handleToken(e), 1000);
-        setTimeout(() => {this.setState({token: this.props.getCookie('token')})},1500);
-        
-        setTimeout(() => this.createProfile(this.state.token), 2000);
+        this.props.handleToken(e)
+        this.createProfile(this.props.getCookie('token'),this.props.getCookie('id'));
     }
     
 
