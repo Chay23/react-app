@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Registration.css';
+import {baseUrl} from "../../config";
 
 class Registration extends Component{
     
@@ -19,7 +20,7 @@ class Registration extends Component{
     }
 
     createProfile = async (token, id) =>{
-        const req = await fetch(`http://localhost:8000/api/v1/users/${id}/profile/`, {
+        const req = await fetch(baseUrl + `/users/${id}/profile/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -38,7 +39,7 @@ class Registration extends Component{
 
     handleRegistration = async (e) => {
         e.preventDefault();
-        const req = await fetch("http://localhost:8000/api/v1/auth/users/", {
+        const req = await fetch(baseUrl + "/auth/users/", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -57,7 +58,7 @@ class Registration extends Component{
     
         this.setState({password:'',re_password:''});
         this.props.handleToken(e)
-        this.createProfile(this.props.getCookie('token'),this.props.getCookie('id'));
+        await this.createProfile(this.props.getCookie('token'), this.props.getCookie('id'));
     }
     
 

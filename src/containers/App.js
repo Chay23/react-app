@@ -12,6 +12,7 @@ import Assingments from './Assignments/Assignments';
 import Assingment from './Assignments/Assignment/Assignment';
 import Subjects from './Subjects/Subjects';
 import Subject from './Subjects/Subject/Subject';
+import {baseUrl} from "../config";
 
 class App extends Component {
   state = {
@@ -33,7 +34,7 @@ class App extends Component {
     if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
     }
-    this.getCurrentUserId()
+    await this.getCurrentUserId()
   }
 
    requireAuth = (nextState, replace, next) => {
@@ -58,7 +59,7 @@ class App extends Component {
 
   handleToken = async (e) => {
     e.preventDefault();
-    const req = await fetch("http://localhost:8000/api/v1/auth/token/login/", {
+    const req = await fetch(baseUrl + "/auth/token/login/", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -73,11 +74,11 @@ class App extends Component {
     document.cookie = `token=${this.state.token}`;
 
     this.setState({password: ""})
-    this.getCurrentUserId();
+    await this.getCurrentUserId();
   }
 
   getCurrentUserId = async () => {
-    const req = await fetch(`http://localhost:8000/api/v1/auth/users/me/`, {
+    const req = await fetch(baseUrl + "/auth/users/me/", {
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.getCookie('token')}`
