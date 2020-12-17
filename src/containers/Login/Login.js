@@ -20,7 +20,7 @@ class Login extends Component{
     render(){
         return (
             <div className="container form-group text-center login-form">
-                <h1>Well cum</h1>
+                <h1>Welcome</h1>
                 <Alert variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <form onSubmit={this.props.handleToken}>
                 <strong>Email</strong> <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleState } /><br/>
