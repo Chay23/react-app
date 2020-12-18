@@ -15,6 +15,7 @@ class Registration extends Component{
     }
 
     componentDidMount(){
+        console.log(baseUrl)
         this.forceUpdate();
     }
 
