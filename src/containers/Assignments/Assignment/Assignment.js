@@ -28,7 +28,6 @@ class Assignment extends Component{
 
     onChange = (newValue, e) =>{
         this.setState({code:newValue})
-        this.getDataFromEditor()
         this.setState({editorWasChanged:true})
     }
 
