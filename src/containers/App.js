@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Redirect, withRouter} from 'react-router-dom';
-import {Alert} from 'react-bootstrap';
+import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 import Layout from '../components/Layout/Layout';
 import Nav from '../components/Nav/Nav';
@@ -140,7 +139,7 @@ class App extends Component {
         />
         <Route 
         path='/assignments' exact
-        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingments {...props} getToken={() =>this.getCookie('token')}/>)}
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingments {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')} />)}
         />
         <Route 
         path='/assignments/:id'
