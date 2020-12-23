@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import MonacoEditor from 'react-monaco-editor';
 import {baseUrl} from "../../../config";
 
+import './Assignment.css';
+
 
 class Assignment extends Component{
     state = {
@@ -92,26 +94,36 @@ class Assignment extends Component{
         };
 
         return(
-            <div>
-                <h3>{this.state.assignment.title}</h3>
-                <p>{this.state.assignment.description}</p>
+            <div className="center container">
+                <h2>{this.state.assignment.title}</h2>
+                <hr/>
+                <h3>Task</h3>
+                <div className="assignment-description">
+                    <p>{this.state.assignment.description}</p>
+                </div>
+                <h4>Send file</h4>
                 <form onSubmit={this.handleSumbit}>
+                <label class="btn btn-outline-dark custom-input-file">
                     <input type="file" 
                         onChange={this.handleChangeFile}>
                     </input>
-                
-                    <MonacoEditor
-                        ref="monaco"
-                        width="800"
-                        height="600"
-                        language="python"
-                        theme="vs-dark"
-                        value={code}
-                        options={options}
-                        onChange={this.onChange}
-                        editorDidMount={this.editorDidMount}
-                    />
-                    <input type="submit" value="Send assignment"></input>
+                    Choose file
+                </label>
+                    <h4>Or type your code</h4>
+                    <div className="editor">
+                        <MonacoEditor
+                            ref="monaco"
+                            width="100%"
+                            height="550"
+                            language="python"
+                            theme="vs-dark"
+                            value={code}
+                            options={options}
+                            onChange={this.onChange}
+                            editorDidMount={this.editorDidMount}
+                        />
+                    </div>
+                    <input type="submit" value="Send assignment" className="btn btn-outline-dark"></input>
                 </form>
             </div>
         );

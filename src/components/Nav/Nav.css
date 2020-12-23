@@ -15,3 +15,12 @@
 .bg-dark {
     background-color: black!important;
 }
+
+.custom-nav-link:hover{
+    font-weight: 600;
+}
+
+.custom-logout{
+    position: absolute;
+    right: 50px;
+}
