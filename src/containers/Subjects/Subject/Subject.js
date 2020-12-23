@@ -5,32 +5,77 @@ import {baseUrl} from "../../../config";
 class Subject extends Component{
     state = {
         subject: "",
-        status: ""
+        status: "",
+        lectures: []
     }
-    componentDidMount = async () =>{
-        const res = await fetch(baseUrl + `/subjects/${this.props.match.params.id}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Token ${this.props.getToken()}`
-        }});
-        const subj = await res.json();
-        this.setState({subject:subj})
-        this.setState({status:res.status});
+
+    getSubjectById = async (subject_id, token) =>{
+        const res = await fetch(baseUrl + `/subjects/${subject_id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`
+            }});
+            const subj = await res.json();
+            this.setState({ subject: subj });
+            this.setState({status:res.status});
+    }
+
+    getSubjectLectures = async (subject_id, token) =>{
+        const res = await fetch(baseUrl + `/subjects/${subject_id}/lectures`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`
+            }
+        });
+        const lectures = await res.json();
+        this.setState({lectures: lectures});
+    }
+    componentDidMount = () =>{
+        const subject_id = this.props.match.params.id;
+        const token = this.props.getToken();
+        this.getSubjectById(subject_id, token);
+        this.getSubjectLectures(subject_id, token);
     }
 
     render(){
         const status = this.state.status;
-        const elements = [];
+        let lectures = this.state.lectures;
+        let subject;
+        let lecturesList;
+
         if (status !== 404){
-            elements.push(<h1>{this.state.subject.title}</h1>)
-            elements.push(<h5>{this.state.subject.description}</h5>)
-            elements.push(<p>Instructor: <Link>{this.state.subject.user}</Link></p>)
+            subject = <div>
+                        <h1>{this.state.subject.title}</h1><br/>
+                        <h5 className='text-justify'>{this.state.subject.description}</h5>
+                    </div>
+            if (lectures.length > 0){
+                lecturesList = lectures.map((lecture, index) => (
+                    <div className='container'>
+                        <div className='row'>
+                            <div className="col-1 align-self-center">
+                                <p className='h4'>{index + 1}</p>
+                            </div>
+                            <div className='col align-self-start'>
+                                <p className='h4'>{lecture.title}</p>
+                                <p className='text-justify' style={{fontFamily:"Georgia"}}>{lecture.text}</p><br/>
+                            </div>
+                        </div>
+                    </div>
+                ));
+            }else {
+                lecturesList = <h5 className='text-center font-weight-light'>No lectures for now</h5>
+            }
+
+
         }else{
-            elements.push(<h3>No subject found</h3>)
+            subject = <h3>No subject found</h3>
         }
+        
         return(
-            <div>
-                {elements}
+            <div className='container'>
+                {subject}
+                <hr/>
+                {lecturesList}
             </div>
         )
     }

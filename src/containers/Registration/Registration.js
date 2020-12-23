@@ -11,11 +11,15 @@ class Registration extends Component{
         re_password: "",
         first_name: "",
         last_name: "",
-        group: ""
+        group: "",
+        groups: [],
+        noGroups: false
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        await this.getGroups();
         this.forceUpdate();
+        
     }
 
     updateState = (e) => {
@@ -40,6 +44,23 @@ class Registration extends Component{
         delete localStorage.msg_type;
       }
 
+    getGroups = async () =>{
+        const res = await fetch(baseUrl + '/users/groups/', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+        });
+        const data = await res.json();
+        await this.setState({groups: data})
+        if (data.length > 0 && data['0'] && data['0'] !== ''){
+            await this.setState({group:data['0'].group})
+        }else{
+            await this.setState({noGroups:true});
+        }
+        
+    }
+
     createProfile = async (token, id) =>{
         await fetch(baseUrl + `/users/${id}/profile/`, {
             method: 'POST',
@@ -60,6 +81,7 @@ class Registration extends Component{
 
     handleRegistration = async (e) => {
         e.preventDefault();
+        
         const req = await fetch(baseUrl + "/auth/users/", {
             method: 'POST',
             headers: {
@@ -81,9 +103,9 @@ class Registration extends Component{
             const user = await req.json()
             this.setState({id: user.id});
             document.cookie = `id=${user.id}`;
-    
+            
             this.setState({password:'',re_password:''});
-            await this.props.handleToken(e)
+            await this.props.handleToken(e);
             await this.createProfile(this.props.getCookie('token'), this.props.getCookie('id'));
         }
         else{
@@ -98,6 +120,16 @@ class Registration extends Component{
     }
 
     render(){
+        let groups = this.state.groups;
+        let field;
+        if (this.state.noGroups){
+            field = <input className="form-control"  type="text" name="group" value={this.state.group} onChange={this.updateState}/>
+        } else {
+            field = <select className="form-control" name="group" onChange={this.updateState}>
+                    {groups.map((group, index)=> <option selected="selected" key={index} value={group.group}>{group.group}</option>)}
+                    </select>
+        }
+
         return (
             <div className="container form-group text-center">
                 <h1>User Registration</h1>
@@ -105,7 +137,7 @@ class Registration extends Component{
                 <form onSubmit={e => {this.handleRegistration(e)}}>
                     First name <input className="form-control"  type="text" name="first_name" value={this.state.first_name} onChange={this.updateState}/><br/>
                     Last name <input className="form-control"  type="text" name="last_name" value={this.state.last_name} onChange={this.updateState}/><br/>
-                    Group <input className="form-control"  type="text" name="group" value={this.state.group} onChange={this.updateState}/><br/>
+                    Group {field}<br/>  
                     Email <input className="form-control"  type="text" name="email" value={this.state.email} onChange={e => {this.updateState(e); this.props.handleState(e)}}/><br/>
                     Password <input className="form-control"  type="password" name="password" value={this.state.password} onChange={e => {this.updateState(e); this.props.handleState(e)}}/><br/>
                     Confirm password <input className="form-control"  type="password" name="re_password" value={this.state.re_password} onChange={this.updateState} /><br/>
