@@ -41,7 +41,7 @@ class  Users extends Component {
                 <h4>{user.first_name} {user.last_name}</h4>
                 <p>{user.user.email}</p>
             </div>
-        )) :<h3>No users ops</h3> 
+        )) :<h3>Oops, no users found</h3> 
         return(
             <div className='container center'>
                <h2>Group name: {this.state.group}</h2>

@@ -1,0 +1,22 @@
+.assignment-description{
+    background-color: rgb(243, 243, 243);
+    border: 2px black solid;
+    border-radius: 4px;
+    box-shadow: 5px 2px 5px black;
+    padding-left: 20px;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-input-file{
+    margin-top: 2px;
+}
+
+.editor{
+    margin-top: 20px;
+    width: 100%;
+}
