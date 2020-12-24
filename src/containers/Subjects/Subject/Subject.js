@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import {baseUrl} from "../../../config";
 
 class Subject extends Component{
     state = {
         subject: "",
         status: "",
-        lectures: []
+        lectures: [],
     }
 
     getSubjectById = async (subject_id, token) =>{
@@ -17,7 +17,7 @@ class Subject extends Component{
             }});
             const subj = await res.json();
             this.setState({ subject: subj });
-            this.setState({status:res.status});
+            this.setState({status: res.status});
     }
 
     getSubjectLectures = async (subject_id, token) =>{
@@ -30,6 +30,7 @@ class Subject extends Component{
         const lectures = await res.json();
         this.setState({lectures: lectures});
     }
+
     componentDidMount = () =>{
         const subject_id = this.props.match.params.id;
         const token = this.props.getToken();
@@ -37,7 +38,7 @@ class Subject extends Component{
         this.getSubjectLectures(subject_id, token);
     }
 
-    render(){
+    render(){   
         const status = this.state.status;
         let lectures = this.state.lectures;
         let subject;
@@ -47,23 +48,30 @@ class Subject extends Component{
             subject = <div>
                         <h1>{this.state.subject.title}</h1><br/>
                         <h5 className='text-justify'>{this.state.subject.description}</h5>
+                        <h6>Instructor:  
+                            <Link to={`/users/${this.state.subject.created_by}`}>{this.state.subject.created_by}</Link>
+                        </h6>
                     </div>
             if (lectures.length > 0){
                 lecturesList = lectures.map((lecture, index) => (
-                    <div className='container'>
+                    <div key={lecture.id} className='container'>
                         <div className='row'>
                             <div className="col-1 align-self-center">
                                 <p className='h4'>{index + 1}</p>
                             </div>
                             <div className='col align-self-start'>
                                 <p className='h4'>{lecture.title}</p>
-                                <p className='text-justify' style={{fontFamily:"Georgia"}}>{lecture.text}</p><br/>
+                                <p className='text-justify' style={{fontFamily:"Georgia"}}>{lecture.text}</p>
+                                <p style={{fontFamily: "Georgia"}}>
+                                    Lecturer: <Link to={`/users/${lecture.user}`}>{ lecture.user}</Link>
+                                </p>
+                                <br/>
                             </div>
                         </div>
                     </div>
                 ));
             }else {
-                lecturesList = <h5 className='text-center font-weight-light'>No lectures for now</h5>
+                lecturesList = <h5 className='text-center font-weight-light' style={{fontFamily: "Georgia"}}>No lectures for now</h5>
             }
 
 
