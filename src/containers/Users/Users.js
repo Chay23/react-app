@@ -19,7 +19,7 @@ class  Users extends Component {
             group:result.group}, 
             () => {this.getUsersInGroup()}
         );
-    };
+    }
 
     getUsersInGroup = async() => {
         const req = await fetch(baseUrl + `/users/group/${this.state.group}`, {
@@ -30,11 +30,12 @@ class  Users extends Component {
         const users = await req.json()
         this.setState({users:users});
 
-    };
+    }
 
     componentDidMount = () => {
         this.getCurrentUserGroup();
-    };
+    }
+
     render(){
         let usersList = this.state.users.length !== 0 ? this.state.users.map((user, index) => (
             <div key={user.user.id} className='user-item'>

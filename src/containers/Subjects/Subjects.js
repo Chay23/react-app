@@ -31,12 +31,14 @@ class Subjects extends Component {
                 </div>
             ))
         } else {
-            subjectList = <h4>No available subjects</h4>
+            subjectList = <h4>No subjects yet</h4>
 
         }
     
         return(
             <div className="container center">
+                <h2>Available subjects</h2>
+                <hr/>
                 <div className="subjects-list">
                 {subjectList}
                 </div>

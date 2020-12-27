@@ -11,15 +11,15 @@ import Assingments from './Assignments/Assignments';
 import Assingment from './Assignments/Assignment/Assignment';
 import Subjects from './Subjects/Subjects';
 import Subject from './Subjects/Subject/Subject';
+import Submissions from './Submissions/Submissions';
+import Submission from './Submissions/Submission/Submission';
 import {baseUrl} from "../config";
 
 class App extends Component {
   state = {
-    user: [],
     email: "",
     password: "",
     token: ""
-
   };
 
   getCookie = (name) =>{
@@ -32,7 +32,8 @@ class App extends Component {
   componentDidMount = () => {
     if(this.getCookie('token')){
       this.setState({token:this.getCookie('token')});
-      this.getCurrentUserId()
+      this.getCurrentUserId();
+      this.getUserStatus();
     }
   }
 
@@ -86,9 +87,9 @@ class App extends Component {
     if(req.ok){
       const result = await req.json()
       this.setState({token: result.auth_token});
-      document.cookie = `token=${this.state.token}`;
+      document.cookie = `token=${this.state.token}; path=/`;
       this.setState({password: ""})
-      this.getCurrentUserId();
+      await this.getCurrentUserId();
     }
     else{
       this.handleLoginError(req.status);
@@ -97,8 +98,9 @@ class App extends Component {
   }
 
   logout = () => {
-    document.cookie = 'token=';
-    document.cookie = 'id=';
+    document.cookie = 'token=; path=/';
+    document.cookie = 'id=; path=/';
+    document.cookie = 'is_staff=; path=/';
     this.setState({email:''})
     this.forceUpdate();
   }
@@ -111,10 +113,19 @@ class App extends Component {
               'Authorization': `Token ${this.getCookie('token')}`
               }})
       const cur_user = await req.json();
-      document.cookie = `id=${cur_user.id}`;
+      document.cookie = `id=${cur_user.id}; path=/`;
     }
   }
 
+  getUserStatus = async () => {
+    const req = await fetch(baseUrl + `/users/${this.getCookie('id')}/profile`, {
+      method: 'GET',
+      headers: {
+          'Authorization': `Token ${this.getCookie('token')}`
+      }})
+      const result = await req.json();
+      document.cookie = `is_staff=${result.user.is_staff}; path=/`
+  }
 
   render(){
   return (
@@ -131,7 +142,7 @@ class App extends Component {
         />
         <Route
         path='/registration'
-        render={ (props) => this.requireAuth() ? (<Registration {...props} handleState={this.handleState} handleToken={this.handleToken} getCookie={this.getCookie}/>) : (<Redirect to="/"/>)}
+        render={ (props) => this.requireAuth() ? (<Registration {...props} handleState={this.handleState} handleToken={this.handleToken} getCookie={this.getCookie} getUserStatus={() =>this.getCookie('is_staff')}/>) : (<Redirect to="/"/>)}
         />
         <Route 
         path='/users'
@@ -139,10 +150,10 @@ class App extends Component {
         />
         <Route 
         path='/assignments' exact
-        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingments {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')} />)}
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingments {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')} getUserStatus={() =>this.getCookie('is_staff')}/>)}
         />
         <Route 
-        path='/assignments/:id'
+        path='/assignments/:id' exact
         render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingment {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
         />
         <Route 
@@ -152,6 +163,14 @@ class App extends Component {
         <Route
         path='/subjects/:id'
         render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Subject {...props} getToken={() => this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
+        />
+        <Route 
+        exact path='/assignments/:id/submissions' 
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Submissions {...props} getToken={() =>this.getCookie('token')}/>)}
+        />
+        <Route 
+        exact path='/assignments/:id/submissions/:submissionId' 
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Submission {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
         />
       </Layout>
     </Router>
