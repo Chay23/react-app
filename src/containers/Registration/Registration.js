@@ -76,7 +76,8 @@ class Registration extends Component{
                     group: this.state.group
             }
             )});
-            this.props.history.push('/');            
+            await this.props.getUserStatus();
+            await this.props.history.push('/');            
     }
 
     handleRegistration = async (e) => {
