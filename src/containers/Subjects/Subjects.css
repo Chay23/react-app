@@ -11,5 +11,15 @@
     font-style: unset;
     box-shadow: 5px 2px 5px black;
     padding-left: 20px;
+}
 
+.link-to-subject{
+    font-weight: lighter;
+    color: black;
+}
+
+.link-to-subject:hover{
+    color: black;
+    text-decoration: none;
+    font-weight: 700; 
 }

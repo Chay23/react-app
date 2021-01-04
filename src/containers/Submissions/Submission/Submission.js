@@ -1,5 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
+import {Alert} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 import {baseUrl} from '../../../config';
 
 import './Submission.css';
@@ -8,8 +11,7 @@ class Submission extends Component{
 
     state = {
         submission: [],
-        changedFeedback: false,
-        feedback: ''
+        alert: false
     }
 
     componentDidMount = async () =>{
@@ -17,33 +19,42 @@ class Submission extends Component{
             method: 'GET',
             headers: {
                 'Authorization': `Token ${this.props.getToken()}`
-            }});
-            const submission = await req.json();
-            this.setState({
-                submission: submission, 
-                feedback: submission.feedback
-            });
+            }})
+            .catch(err => {
+                this.handleFetchError(0);
+                return err;
+            })
+            if(req.ok){
+                const submission = await req.json();
+                this.setState({
+                    submission: submission, 
+                    feedback: submission.feedback
+                })
+            }else{
+                this.handleFetchError(req.status);
+                this.forceUpdate();
+            }
+            
     } 
 
-    handleFeedback = (e) => {
-        this.setState({feedback: e.target.value})
+    componentWillUnmount(){
+        delete localStorage.msg;
+        delete localStorage.msg_type;
     }
 
-    handleSubmit = async (e) => {
-        e.preventDefault();
-        let formData = new FormData();
-        formData.append('feedback', this.state.feedback ? this.state.feedback : null)
-        
-        const reqSecond = await fetch(baseUrl + `/submissions/${this.props.match.params.submissionId}`, {
-            method: 'PATCH',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Token ${this.props.getToken()}`,
-            },
-            body: formData
-            })
-        // const result = await req.json()
+    handleFetchError = (status) => {
+        if(status === 0){
+            localStorage.msg = 'Can not connect to server';
+            localStorage.msg_type = 'danger';
+        }
+        else if(status === 404){
+            localStorage.msg = 'Invalid submission id';
+            localStorage.msg_type = 'danger';
+        }
+        this.setState({alert: true});
+        this.forceUpdate();
     }
+
 
     getAttachedFileName = () => {
         let fileName = '';
@@ -55,21 +66,22 @@ class Submission extends Component{
         return fileName;
     }
 
+    showAlert = () => {
+        return this.state.alert ? 'block' : 'none'
+    }
+
     render (){
         let fileName = this.getAttachedFileName();
         return(
             <div className="container">
+                <Link to={`/assignments/${this.props.match.params.id}/submissions`} className="btn btn-outline-dark back-button">Back</Link>
                 <h2>Submission {this.props.match.params.submissionId}</h2>
                 <hr/>
+                <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <div className="submission-file">
                     <h4>File</h4>
                     <a href={baseUrl + `/submissions/file/${fileName}`}>{fileName}</a>
                 </div>
-                <form onSubmit={this.handleSubmit}>
-                    <h4>Feedback</h4>
-                    <p><textarea className="form-control custom-text-area" row='5' cols='45' name='feedback' onChange={this.handleFeedback} value={this.state.feedback === 'null' ? "" : this.state.feedback}></textarea></p>
-                    <input className="btn btn-outline-dark" type="submit" value="Send"/>
-                </form>
             </div>
         );
     }

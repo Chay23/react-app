@@ -7,13 +7,18 @@ import Login from './Login/Login';
 import Registration from './Registration/Registration';
 import Users from './Users/Users';
 import Main from '../components/Main/Main';
-import Assingments from './Assignments/Assignments';
-import Assingment from './Assignments/Assignment/Assignment';
+import Assignments from './Assignments/Assignments';
+import Assignment from './Assignments/Assignment/Assignment';
 import Subjects from './Subjects/Subjects';
 import Subject from './Subjects/Subject/Subject';
 import Submissions from './Submissions/Submissions';
 import Submission from './Submissions/Submission/Submission';
+import Lecture from './Lecture/Lecture';
+import DoneAssignments from './Assignments/DoneAssignments/DoneAssignments';
+
 import {baseUrl} from "../config";
+
+import './App.css';
 
 class App extends Component {
   state = {
@@ -149,20 +154,28 @@ class App extends Component {
         render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Users {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
         />
         <Route 
-        path='/assignments' exact
-        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingments {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')} getUserStatus={() =>this.getCookie('is_staff')}/>)}
+        exact path='/assignments' 
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assignments {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')} getUserStatus={() =>this.getCookie('is_staff')}/>)}
         />
         <Route 
-        path='/assignments/:id' exact
-        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assingment {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
+        exact path='/assignments/:id' 
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Assignment {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
+        />
+        <Route 
+        exact path='/assignments-done' 
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<DoneAssignments {...props} getToken={() =>this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
         />
         <Route 
         exact path='/subjects' 
         render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Subjects {...props} getToken={() =>this.getCookie('token')}/>)}
         />
         <Route
-        path='/subjects/:id'
+        exact path='/subjects/:id'
         render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Subject {...props} getToken={() => this.getCookie('token')} getUserId={() =>this.getCookie('id')}/>)}
+        />
+        <Route 
+        exact path='/subjects/:id/lectures/:lectureId' 
+        render={props => this.requireAuth() ? (<Redirect to="/login"/>) : (<Lecture {...props} getToken={() =>this.getCookie('token')}/>)}
         />
         <Route 
         exact path='/assignments/:id/submissions' 

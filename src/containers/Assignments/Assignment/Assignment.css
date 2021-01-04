@@ -21,6 +21,13 @@ input[type="file"] {
     width: 100%;
 }
 
-.alert{
+.alert-assignment{
     width: 100%;
+}
+
+.monaco-editor{
+    width: 100%;
+}
+.submit-button{
+    margin-bottom: 20px;
 }

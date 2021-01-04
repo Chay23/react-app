@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import React, {Component} from 'react';
+import { Alert } from 'react-bootstrap';
+
 import {baseUrl} from "../../../config";
+
+import './Subject.css';
 
 class Subject extends Component{
     state = {
@@ -14,10 +18,19 @@ class Subject extends Component{
             method: 'GET',
             headers: {
                 'Authorization': `Token ${token}`
-            }});
-            const subj = await res.json();
-            this.setState({ subject: subj });
-            this.setState({status:res.status});
+            }})
+            .catch(err => {
+                this.handleFetchError(0);
+                return err;
+            })
+            if(res.ok){
+                const subj = await res.json();
+                this.setState({ subject: subj });
+                this.setState({status:res.status});
+            }else{
+                this.handleFetchError(res.status);
+            }
+           
     }
 
     getSubjectLectures = async (subject_id, token) =>{
@@ -30,11 +43,29 @@ class Subject extends Component{
         const lectures = await res.json();
         this.setState({lectures: lectures});
     }
+
+    handleFetchError = (status) => {
+        if(status === 0){
+            localStorage.msg = 'Can not connect to server';
+            localStorage.msg_type = 'danger';
+        }
+        else if(status === 400 || status === 404){
+            localStorage.msg = 'Invalid assignment id';
+            localStorage.msg_type = 'danger';
+        }
+        this.setState({alert: true});
+        this.forceUpdate();
+    }
+
     componentDidMount = () =>{
         const subject_id = this.props.match.params.id;
         const token = this.props.getToken();
         this.getSubjectById(subject_id, token);
         this.getSubjectLectures(subject_id, token);
+    }
+
+    showAlert = () => {
+        return this.state.alert ? 'block' : 'none'
     }
 
     render(){
@@ -45,20 +76,18 @@ class Subject extends Component{
 
         if (status !== 404){
             subject = <div>
-                        <h1>{this.state.subject.title}</h1><br/>
-                        <h5 className='text-justify'>{this.state.subject.description}</h5>
+                        <h1>{this.state.subject.title}</h1>
                     </div>
             if (lectures.length > 0){
                 lecturesList = lectures.map((lecture, index) => (
                     <div className='container'>
-                        <div className='row'>
-                            <div className="col-1 align-self-center">
-                                <p className='h4'>{index + 1}</p>
-                            </div>
-                            <div className='col align-self-start'>
-                                <p className='h4'>{lecture.title}</p>
-                                <p className='text-justify' style={{fontFamily:"Georgia"}}>{lecture.text}</p><br/>
-                            </div>
+                        <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
+                        <div>
+                            <p>
+                                <h4>{index + 1 + "."} 
+                                <Link to={`/subjects/${this.props.match.params.id}/lectures/${lecture.id}`} className="link-to-lecture">{lecture.title}</Link>
+                                </h4>
+                            </p>
                         </div>
                     </div>
                 ));
@@ -73,8 +102,10 @@ class Subject extends Component{
         
         return(
             <div className='container'>
+                <Link to={'/subjects'} className="btn btn-outline-dark back-button">Back</Link>
                 {subject}
                 <hr/>
+                <h3>Available lectures</h3>
                 {lecturesList}
             </div>
         )
