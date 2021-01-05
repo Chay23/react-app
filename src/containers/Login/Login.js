@@ -23,9 +23,9 @@ class Login extends Component{
                 <h1>Welcome</h1>
                 <Alert className="alert-login" variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <form onSubmit={this.props.handleToken}>
-                <strong>Email</strong> <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleState } /><br/>
-                <strong>Password</strong> < input className="form-control"  type="password" name="password" value={this.props.password} onChange={this.props.handleState} />
-                <input className="btn btn-outline-dark" type="submit" value="Sign in"/>
+                    <strong>Email</strong> <input  className="form-control" type="text" name="email" value={this.props.email} onChange={this.props.handleState } /><br/>
+                    <strong>Password</strong> < input className="form-control"  type="password" name="password" value={this.props.password} onChange={this.props.handleState} />
+                    <input className="btn btn-outline-dark custom-login-submit" type="submit" value="Sign in"/>
                 </form>
             </div>
         );

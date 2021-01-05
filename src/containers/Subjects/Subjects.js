@@ -59,7 +59,7 @@ class Subjects extends Component {
                 </div>
             ))
         } else {
-            subjectList = <h4>No subjects yet</h4>
+            subjectList = <h3>No subjects yet</h3>
 
         }
     

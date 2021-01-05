@@ -80,7 +80,7 @@ class Subject extends Component{
                     </div>
             if (lectures.length > 0){
                 lecturesList = lectures.map((lecture, index) => (
-                    <div className='container'>
+                    <div className='container' key={lecture.id}>
                         <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                         <div>
                             <p>

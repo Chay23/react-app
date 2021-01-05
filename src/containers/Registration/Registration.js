@@ -37,7 +37,7 @@ class Registration extends Component{
             localStorage.msg = 'Incorrect email or password confirmation or user already registered';
             localStorage.msg_type = 'danger';
         }
-      }
+    }
     
     deleteMessages = () => {
         delete localStorage.msg;
@@ -105,7 +105,10 @@ class Registration extends Component{
             this.setState({id: user.id});
             document.cookie = `id=${user.id}`;
             
-            this.setState({password:'',re_password:''});
+            this.setState({
+                password: '',
+                re_password: ''
+            });
             await this.props.handleToken(e);
             await this.createProfile(this.props.getCookie('token'), this.props.getCookie('id'));
         }
@@ -133,7 +136,7 @@ class Registration extends Component{
 
         return (
             <div className="container form-group text-center">
-                <h1>User Registration</h1>
+                <h1>Registration</h1>
                 <Alert className="alert-registration" variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <form onSubmit={e => {this.handleRegistration(e)}}>
                     First name <input className="form-control"  type="text" name="first_name" value={this.state.first_name} onChange={this.updateState}/><br/>
@@ -142,7 +145,7 @@ class Registration extends Component{
                     Email <input className="form-control"  type="text" name="email" value={this.state.email} onChange={e => {this.updateState(e); this.props.handleState(e)}}/><br/>
                     Password <input className="form-control"  type="password" name="password" value={this.state.password} onChange={e => {this.updateState(e); this.props.handleState(e)}}/><br/>
                     Confirm password <input className="form-control"  type="password" name="re_password" value={this.state.re_password} onChange={this.updateState} /><br/>
-                    <input  className="btn btn-outline-dark" type="submit" value="Sign up"/>
+                    <input  className="btn btn-outline-dark custom-registration-submit" type="submit" value="Sign up"/>
                 </form>
             </div>
         );

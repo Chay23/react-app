@@ -44,7 +44,7 @@ class Assignments extends Component{
     }
     
     showStaffMenu = () => {
-        return (this.props.getUserStatus() === 'true' ? <div><Link to='assignments-done' className="btn btn-dark link-to-submissions">Done assignments</Link></div> : "")
+        return (this.props.getUserStatus() === 'true' ? <div><Link to='assignments-done' className="btn btn-dark">Done assignments</Link></div> : "")
     }
 
     showAlert = () => {
@@ -59,8 +59,8 @@ class Assignments extends Component{
 
         return(
             <div className="center container">
-                {this.showStaffMenu()}
                 <h2>Available assignments</h2>
+                {this.showStaffMenu()}
                 <hr/>
                 <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <div className="assignments-list">

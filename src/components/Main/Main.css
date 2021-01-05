@@ -1,0 +1,28 @@
+.link-container{
+    text-align: center;
+}
+
+.link-to-instruction{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.link-to-instruction:hover{
+    text-decoration: none;
+}
+
+.updates-container{
+    text-align: center;
+    margin: 30px;
+}
+
+.update{
+    margin: auto;
+    width: 700px;
+    background-color: rgb(243, 243, 243);
+    border: 2px black solid;
+    border-radius: 4px;
+    box-shadow: 5px 2px 5px black;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}

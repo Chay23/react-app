@@ -124,7 +124,12 @@ class Assignment extends Component{
             },
             body: formData
         })
-        if(!req.ok){
+        if(req.ok){
+            this.setState({alert: true});
+            localStorage.msg = 'Submission was successfully sent';
+            localStorage.msg_type = 'success';
+            this.forceUpdate();
+        }else{
             this.handleFetchError(req.status);
             this.forceUpdate();
         }

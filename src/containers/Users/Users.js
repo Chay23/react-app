@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Users.css'
 import {baseUrl} from "../../config";
+import { Link } from 'react-router-dom';
 
 class  Users extends Component {
     state = {
@@ -46,6 +47,7 @@ class  Users extends Component {
         return(
             <div className='container center'>
                <h2>Group name: {this.state.group}</h2>
+               <Link to={'/users/change-password'} className="btn btn-dark">Change password</Link>
                <hr/>
                <div className='users-list'>
               {usersList}
