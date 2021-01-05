@@ -3,11 +3,10 @@ import './Layout.css';
 
 
 const layout = (props) => (
-    <div>
-        <main>
-            {props.children}
-        </main>
-    </div>
+    <main>
+        {props.children}
+    </main>
+    
 );
 
 export default layout;

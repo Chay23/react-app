@@ -35,7 +35,7 @@ function Nav (props) {
                         </Link>
                 }
                 {props.requireLogin() ? 
-                    "":<Link to="/login">
+                    "" :<Link to="/login">
                             <li className="navbar-brand custom-nav-link custom-logout" onClick={props.logout}>Logout</li>
                         </Link>
                 }               

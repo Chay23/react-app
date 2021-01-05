@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Alert} from 'react-bootstrap';
 
-import {baseUrl} from "../../config";
+import {baseUrl} from "../../../config";
 
-import './Assignments.css';
+import '../Assignments.css';
 
 class Assignments extends Component{
     
@@ -14,7 +14,7 @@ class Assignments extends Component{
     }
 
     componentDidMount = async () => {
-        const req = await fetch(baseUrl + "/assignments/", {
+        const req = await fetch(baseUrl + `/assignments/user/${this.props.getUserId()}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${this.props.getToken()}`
@@ -43,9 +43,6 @@ class Assignments extends Component{
         this.forceUpdate();
     }
     
-    showStaffMenu = () => {
-        return (this.props.getUserStatus() === 'true' ? <div><Link to='assignments-done' className="btn btn-dark">Done assignments</Link></div> : "")
-    }
 
     showAlert = () => {
         return this.state.alert ? 'block' : 'none'
@@ -54,13 +51,12 @@ class Assignments extends Component{
     render(){
         let assignmentList = this.state.assignments.length !== 0 ? this.state.assignments.map((assignment, index) => (
             <h3 key={assignment.id} className="assignment-item">
-                <Link to={`/assignments/${assignment.id}`} className="link-to-assignment">{assignment.title}</Link></h3>
+                <Link to={`/assignments-done/${assignment.id}/submissions`} className="link-to-assignment">{assignment.title}</Link></h3>
         )) : <h3>No assignmets yet</h3>
 
         return(
             <div className="center container">
-                <h2>Available assignments</h2>
-                {this.showStaffMenu()}
+                <h2>Select assignment</h2>
                 <hr/>
                 <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <div className="assignments-list">

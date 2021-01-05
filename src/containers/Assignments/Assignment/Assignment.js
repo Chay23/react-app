@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MonacoEditor from 'react-monaco-editor';
-import {Alert} from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import { Link } from "react-router-dom";
+
 
 import {baseUrl} from "../../../config";
 
@@ -8,13 +10,15 @@ import './Assignment.css';
 
 
 class Assignment extends Component{
+    
     state = {
         assignment: [],
         attachedFile: null,
         code: '# type your code...',
         editorWasChanged: false,
         fileName: '',
-        alert: false
+        alert: false,
+        disabled: true
     }
 
     componentDidMount = async () => {
@@ -24,9 +28,18 @@ class Assignment extends Component{
         method: 'GET',
         headers: {
             'Authorization': `Token ${this.props.getToken()}`
-            }})
-        const assignment = await req.json()
-        this.setState({assignment: assignment})
+        }})
+        .catch(err => {
+            this.handleFetchError(0);
+            return err;
+        })
+        if(req.ok){
+            const assignment = await req.json()
+            this.setState({assignment: assignment})
+
+        }else{
+            this.handleFetchError(req.status);
+        }
         
     }
 
@@ -41,7 +54,28 @@ class Assignment extends Component{
 
     onChange = (newValue, e) => {
         this.setState({code: newValue})
-        this.setState({editorWasChanged: true})
+        this.setState({
+            editorWasChanged: true,
+            disabled: false
+        });
+    }
+
+    componentWillUnmount(){
+        delete localStorage.msg;
+        delete localStorage.msg_type;
+    }
+
+    handleFetchError = (status) => {
+        if(status === 0){
+            localStorage.msg = 'Can not connect to server';
+            localStorage.msg_type = 'danger';
+        }
+        else if(status === 400 || status === 404){
+            localStorage.msg = 'Invalid assignment id';
+            localStorage.msg_type = 'danger';
+        }
+        this.setState({alert: true});
+        this.forceUpdate();
     }
 
     handleChangeFile = async(e) => {
@@ -53,13 +87,17 @@ class Assignment extends Component{
         let fileName = this.state.attachedFile.name
         fileName = fileName.match(/[-\s\w\d]*.py$/);
         if(!fileName){
-            localStorage.msg = 'Wrong file extension. Please, choose another one';
+            localStorage.msg = 'Invalid file extension. Please, choose another one';
             localStorage.msg_type = 'danger';
             this.setState({
                 attachedFile: null,
-                alert: true
+                alert: true,
+                disabled: true
             })
             this.forceUpdate();
+        }
+        else{
+            this.setState({disabled: false});
         }
     }
     
@@ -85,9 +123,19 @@ class Assignment extends Component{
                 'Authorization': `Token ${this.props.getToken()}`,
             },
             body: formData
-            })
-        const result = await req.json()
-      }
+        })
+        if(req.ok){
+            this.setState({alert: true});
+            localStorage.msg = 'Submission was successfully sent';
+            localStorage.msg_type = 'success';
+            this.forceUpdate();
+        }else{
+            this.handleFetchError(req.status);
+            this.forceUpdate();
+        }
+    }
+
+
 
     getDataFromEditor = () => {
         const model = this.refs.monaco.editor.getModel();
@@ -124,9 +172,10 @@ class Assignment extends Component{
 
         return(
             <div className="center container">
+                <Link to={'/assignments'} className="btn btn-outline-dark back-button">Back</Link>
                 <h2>{this.state.assignment.title}</h2>
                 <hr/>
-                <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
+                <Alert className="alert-assignment" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <h3>Task</h3>
                 <div className="assignment-description">
                     <p>{this.state.assignment.description}</p>
@@ -153,7 +202,7 @@ class Assignment extends Component{
                             editorDidMount={this.editorDidMount}
                         />
                     </div>
-                    <input type="submit" value="Send assignment" className="btn btn-outline-dark"></input>
+                    <input type="submit" disabled={this.state.disabled} value="Send assignment" className="btn btn-outline-dark submit-button"></input>
                 </form>
             </div>
         );

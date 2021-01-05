@@ -1,0 +1,12 @@
+.link-to-lecture{
+    font-weight: lighter;
+    margin-left: 10px;
+    color: black;
+    font-weight: 400;
+}
+
+.link-to-lecture:hover{
+    color: black;
+    text-decoration: none;
+    font-weight: 700; 
+}

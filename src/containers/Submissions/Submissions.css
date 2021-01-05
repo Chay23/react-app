@@ -1,4 +1,4 @@
-.submission-file{
+.submission-files{
     width: 500px;
     background-color: rgb(243, 243, 243);
     border: 2px black solid;
@@ -9,6 +9,11 @@
     margin-bottom: 10px;
 }
 
-.custom-text-area{
-    margin-left: 0px;
+.custom-search-input{
+    margin: 0;
+}
+
+.custom-search-button{
+    margin: 0;
+    margin-left: 5px;
 }
