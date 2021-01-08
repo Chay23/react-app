@@ -109,7 +109,8 @@ class Assignment extends Component{
             await this.getFileName()
             formData.append('attached_file', this.state.attachedFile, this.state.fileName)
         }else{
-            formData.append('attached_file', this.state.attachedFile)
+            await this.getFileName()
+            formData.append('attached_file', this.state.attachedFile, this.state.fileName)
         }
         
         formData.append('feedback', null)
