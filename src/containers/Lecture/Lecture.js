@@ -61,7 +61,7 @@ class Lecture extends Component{
                 <hr/>
                 <Alert className="alert" style={{display: this.showAlert()}}variant={localStorage.msg_type}>{localStorage.msg}</Alert>
                 <div className="lecture-text-content">
-                    <p className="lecture-text">{this.state.lecture.text}</p>
+                    <p className="lecture-text" dangerouslySetInnerHTML={{__html: this.state.lecture.text}}></p>
                 </div>
             </div>
         );
