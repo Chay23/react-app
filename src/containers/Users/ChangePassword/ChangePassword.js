@@ -32,12 +32,17 @@ class ChangePassword extends Component{
     }
 
     handleFetchError = (status) => {
+        console.log(status)
         if(status === 0){
             localStorage.msg = 'Can not connect to server';
             localStorage.msg_type = 'danger';
         }
+        else if(this.state.new_password.length < 8){
+            localStorage.msg = 'New password too short';
+            localStorage.msg_type = 'danger';
+        }
         else if(status === 400){
-            localStorage.msg = 'Incorrect email or password confirmation or user already registered';
+            localStorage.msg = 'Wrong current password';
             localStorage.msg_type = 'danger';
         }
     }
@@ -64,6 +69,11 @@ class ChangePassword extends Component{
         if(req.ok){
             localStorage.msg = 'Password changed successfully';
             localStorage.msg_type = 'success';
+            this.forceUpdate();
+        }
+        else{
+            console.log(req.text);
+            this.handleFetchError(req.status);
             this.forceUpdate();
         }
     }
